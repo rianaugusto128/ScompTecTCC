@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.tools/
+.build/
+opta_secrets.h
+venv/
+.cache/
+*.db
+*.db-shm
+*.db-wal
+docs/.documento_qa/
+scomptec-cnc front 2/release/

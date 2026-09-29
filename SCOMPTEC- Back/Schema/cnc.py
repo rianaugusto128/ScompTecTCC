@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional, Dict, Any
 from pydantic import BaseModel, Field, ConfigDict
+from Schema.common import UTCModel
 
 
 class CNCCreate(BaseModel):
@@ -13,7 +14,7 @@ class CNCUpdate(BaseModel):
     description: Optional[str] = Field(default=None, max_length=1000)
 
 
-class CNCResponse(BaseModel):
+class CNCResponse(UTCModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
@@ -26,7 +27,7 @@ class CNCResponse(BaseModel):
     created_at: datetime
 
 
-class CNCStatusResponse(BaseModel):
+class CNCStatusResponse(UTCModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
@@ -37,6 +38,10 @@ class CNCStatusResponse(BaseModel):
     status_duration_seconds: int
     last_seen: Optional[datetime] = None
     gateway_online: bool
+    last_known_status: str = "SEM_COMUNICACAO"
+    telemetry_timestamp: Optional[datetime] = None
+    telemetry_received_at: Optional[datetime] = None
+    extra_signals: Optional[Dict[str, Any]] = None
     digital_signals: Optional[Dict[str, Any]] = None
     analog_signals: Optional[Dict[str, Any]] = None
     voltage_24v: Optional[bool] = None

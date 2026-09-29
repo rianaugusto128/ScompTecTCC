@@ -1,0 +1,36 @@
+{
+  "event_id": "example-boot:1",
+  "timestamp": "2026-09-10T12:00:00Z",
+  "machine_active": true,
+  "voltage_24v": null,
+  "digital_signals": {
+    "ciclo": true,
+    "alarme": false,
+    "altura_media_bloqueada": false,
+    "altura_pequena_bloqueada": true,
+    "altura_grande_bloqueada": false,
+    "metal_presente": true,
+    "queda1_ocupada": false,
+    "queda2_ocupada": false,
+    "rampa1_cheia": false,
+    "rampa2_cheia": false
+  },
+  "analog_signals": {},
+  "extra_signals": {
+    "rssi": -60,
+    "uptime_seconds": 60,
+    "boot_id": "example-boot",
+    "amostras_descartadas": 0,
+    "mesa": {
+      "estado": "acionando_queda1",
+      "altura": "pequena",
+      "metal_memorizado": true,
+      "rampa1_cheia": false,
+      "rampa2_cheia": false,
+      "capturado_millis": 60000,
+      "entradas_brutas": {"I1": false, "I2": true, "I3": false, "I4": true, "I5": true, "I6": false, "I7": false},
+      "saidas_comandadas": {"O1": true, "O2": true, "O3": false},
+      "contadores": {"total": 3, "reto": 1, "queda1": 0, "queda2": 1, "falhas": 0}
+    }
+  }
+}

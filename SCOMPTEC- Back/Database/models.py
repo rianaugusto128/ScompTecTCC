@@ -21,6 +21,14 @@ class Base(DeclarativeBase):
     pass
 
 
+class CodeSequence(Base):
+    """Persistent counters used for human-readable CNC and Arduino Opta WiFi codes."""
+    __tablename__ = "code_sequences"
+
+    prefix: Mapped[str] = mapped_column(String(20), primary_key=True)
+    last_number: Mapped[int] = mapped_column(nullable=False, default=0)
+
+
 # ============================================================
 # USUÁRIO / AUTENTICAÇÃO
 # ============================================================
@@ -36,6 +44,35 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+
+class AdminIncident(Base):
+    __tablename__ = "admin_incidents"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    machine_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    machine_code: Mapped[str] = mapped_column(String(20), nullable=False)
+    title: Mapped[str] = mapped_column(String(180), nullable=False)
+    priority: Mapped[str] = mapped_column(String(20), nullable=False)
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="Aberta")
+    assignee: Mapped[str] = mapped_column(String(36), nullable=False, default="")
+    note: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    attendance: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+
+class AdminRules(Base):
+    __tablename__ = "admin_rules"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    values: Mapped[dict] = mapped_column(JSON, nullable=False)
+
+
+class AdminAudit(Base):
+    __tablename__ = "admin_audit"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
+    actor_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    actor_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    action: Mapped[str] = mapped_column(Text, nullable=False)
+    at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 # ============================================================
@@ -59,7 +96,7 @@ class CNC(Base):
     )
 
     name: Mapped[str] = mapped_column(
-        String(100),
+        String(255),
         nullable=False,
     )
 
@@ -118,8 +155,20 @@ class Device(Base):
     )
 
     name: Mapped[str] = mapped_column(
-        String(100),
+        String(255),
         nullable=False,
+    )
+
+    mac_address: Mapped[str | None] = mapped_column(
+        String(17),
+        unique=True,
+        nullable=True,  # Somente legado; novos cadastros exigem MAC no schema.
+        index=True,
+    )
+
+    ip_address: Mapped[str | None] = mapped_column(
+        String(45),
+        nullable=True,
     )
 
     cnc_id: Mapped[str] = mapped_column(
@@ -130,6 +179,7 @@ class Device(Base):
         ),
         nullable=False,
         index=True,
+        unique=True,
     )
 
     firmware_version: Mapped[str | None] = mapped_column(
@@ -224,6 +274,10 @@ class Telemetry(Base):
         back_populates="telemetry",
     )
 
+    ingestion_order: Mapped["TelemetryOrder | None"] = relationship(
+        "TelemetryOrder", cascade="all, delete-orphan", uselist=False,
+    )
+
     # ============================================================
     # Login
     # ============================================================
@@ -231,3 +285,16 @@ class Telemetry(Base):
     # ============================================================
     # Registro
     # ============================================================
+
+
+class TelemetryOrder(Base):
+    """Stable arrival ordering, including MySQL timestamps within one second.
+
+    A separate table avoids altering telemetry columns in existing installations.
+    Legacy rows keep their received_at ordering until new readings arrive.
+    """
+    __tablename__ = "telemetry_order"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    telemetry_id: Mapped[str] = mapped_column(
+        String(36), ForeignKey("telemetry.id", ondelete="CASCADE"), unique=True,
+    )

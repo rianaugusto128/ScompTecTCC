@@ -1,5 +1,7 @@
 import os
 
+import config  # Também permite importar o banco diretamente com o .env carregado.
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -11,7 +13,7 @@ DATABASE_URL = os.getenv(
     "mysql+pymysql://root:@127.0.0.1:3306/cnc_monitor?charset=utf8mb4",
 )
 
-engine = create_engine(DATABASE_URL, echo=os.getenv("SQL_ECHO", "false").lower() == "true", pool_pre_ping=True)
+engine = create_engine(DATABASE_URL, echo=os.getenv("SQL_ECHO", "false").lower() == "true", pool_pre_ping=True, pool_recycle=1800)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 

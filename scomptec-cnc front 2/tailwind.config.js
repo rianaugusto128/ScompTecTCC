@@ -1,0 +1,123 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        base: {
+          bg: "#060A11",
+          surface: "#0A101C",
+          card: "#0E1626",
+          cardHover: "#131F33",
+          cardActive: "#17253D",
+          border: "#19263A",
+          borderLight: "#243650",
+          borderGreen: "rgba(16, 185, 129, 0.22)",
+        },
+        text: {
+          primary: "#F8FAFC",
+          secondary: "#94A3B8",
+          muted: "#64748B",
+          dim: "#475569",
+        },
+        accent: {
+          50: "#ecfdf5",
+          100: "#d1fae5",
+          200: "#a7f3d0",
+          300: "#6ee7b7",
+          400: "#34d399",
+          500: "#10b981",
+          600: "#059669",
+          700: "#047857",
+          800: "#065f46",
+          900: "#064e3b",
+          DEFAULT: "#10B981",
+          hover: "#00F59B",
+          neon: "#00F59B",
+          soft: "rgba(16, 185, 129, 0.10)",
+          subtle: "rgba(16, 185, 129, 0.05)",
+          border: "rgba(16, 185, 129, 0.25)",
+        },
+        status: {
+          run: "#10B981",
+          runBg: "rgba(16, 185, 129, 0.12)",
+          idle: "#E2E8F0",
+          idleBg: "rgba(226, 232, 240, 0.08)",
+          alarm: "#F59E0B",
+          alarmBg: "rgba(245, 158, 11, 0.12)",
+          emergency: "#EF4444",
+          emergencyBg: "rgba(239, 68, 68, 0.14)",
+          off: "#64748B",
+          offBg: "rgba(100, 116, 139, 0.12)",
+          nocomm: "#94A3B8",
+          nocommBg: "rgba(148, 163, 184, 0.10)",
+        },
+      },
+      spacing: {
+        "4.5": "1.125rem",
+        "5.5": "1.375rem",
+        "6.5": "1.625rem",
+        "7.5": "1.875rem",
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        mono: ["JetBrains Mono", "SFMono-Regular", "ui-monospace", "monospace"],
+      },
+      boxShadow: {
+        card: "0 1px 2px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04)",
+        cardHover: "0 10px 30px -6px rgba(0,0,0,0.7), 0 0 0 1px rgba(16,185,129,0.28), 0 0 24px rgba(16,185,129,0.09)",
+        panel: "0 14px 36px -6px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06)",
+        glowGreen: "0 0 25px -4px rgba(16,185,129,0.35)",
+        glowGreenSm: "0 0 12px -2px rgba(16,185,129,0.45)",
+        innerHighlight: "inset 0 1px 0 rgba(255,255,255,0.07)",
+      },
+      keyframes: {
+        pulseRing: {
+          "0%": { transform: "scale(0.9)", opacity: "0.8" },
+          "70%": { transform: "scale(2.2)", opacity: "0" },
+          "100%": { transform: "scale(2.2)", opacity: "0" },
+        },
+        fadeUp: {
+          "0%": { opacity: "0", transform: "translateY(10px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        charIn: {
+          "0%": { opacity: "0", transform: "translateY(16px) scale(0.92)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+        loadBar: {
+          "0%": { transform: "scaleX(0)" },
+          "100%": { transform: "scaleX(1)" },
+        },
+        glowPulse: {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "1" },
+        },
+        beaconRadar: {
+          "0%": { transform: "scale(1)", opacity: "1" },
+          "100%": { transform: "scale(2.6)", opacity: "0" },
+        },
+        criticalEvent: {
+          "0%, 100%": { boxShadow: "0 0 0 rgba(239,68,68,0)" },
+          "25%, 75%": { boxShadow: "0 0 0 2px rgba(239,68,68,0.5), 0 0 24px rgba(239,68,68,0.2)" },
+        },
+        badgeIn: {
+          "0%": { opacity: "0", transform: "translateX(-4px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        pulseRing: "pulseRing 2s cubic-bezier(0.4,0,0.6,1) infinite",
+        beaconRadar: "beaconRadar 2.2s cubic-bezier(0,0,0.2,1) infinite",
+        fadeUp: "fadeUp 0.35s cubic-bezier(0.16,1,0.3,1) both",
+        charIn: "charIn 0.5s cubic-bezier(0.16,1,0.3,1) both",
+        loadBar: "loadBar 2s cubic-bezier(0.4,0,0.2,1) both",
+        glowPulse: "glowPulse 2.5s ease-in-out infinite",
+        criticalEvent: "criticalEvent 1.4s ease-in-out 2",
+        badgeIn: "badgeIn .25s ease-out both",
+      },
+    },
+  },
+  plugins: [],
+};

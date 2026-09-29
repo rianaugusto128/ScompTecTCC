@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-base-bg text-text-primary antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01", "ss03";
+    min-width: 320px;
+    background-image: 
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16, 185, 129, 0.09), transparent 60%),
+      radial-gradient(circle at 90% 20%, rgba(16, 185, 129, 0.04), transparent 35%),
+      linear-gradient(to bottom, rgba(6, 10, 17, 0.7), rgba(6, 10, 17, 1));
+    background-attachment: fixed;
+  }
+  ::selection {
+    @apply bg-accent/25 text-accent-100;
+  }
+  :focus-visible {
+    outline: 2px solid #10B981;
+    outline-offset: 2px;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #060A11;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #19263A;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #10B981;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply relative overflow-hidden rounded-xl border border-base-border bg-base-card shadow-card transition-all duration-200;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  .panel-glow {
+    @apply panel;
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 20px -3px rgba(16, 185, 129, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .panel-hover {
+    @apply panel hover:border-accent/40 hover:bg-base-cardHover hover:shadow-cardHover hover:-translate-y-0.5;
+  }
+
+  .eyebrow {
+    @apply text-[10px] font-bold uppercase tracking-[0.16em] text-accent/90;
+  }
+
+  .eyebrow-muted {
+    @apply text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted;
+  }
+
+  .data-mono {
+    @apply font-mono tabular-nums tracking-tight;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-accent to-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-glowGreenSm transition-all duration-200 hover:from-accent-hover hover:to-accent hover:shadow-glowGreen hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:hover:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-base-border bg-base-card/80 px-4 py-2.5 text-sm font-medium text-text-primary backdrop-blur-sm transition-all duration-200 hover:border-accent/40 hover:bg-base-cardHover hover:text-accent active:bg-base-cardActive;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-colors hover:bg-base-cardHover hover:text-accent;
+  }
+
+  .input-field {
+    @apply w-full rounded-lg border border-base-border bg-base-surface/80 px-3.5 py-2 text-sm text-text-primary placeholder:text-text-muted transition-all duration-200 hover:border-base-borderLight focus:border-accent focus:bg-base-card focus:outline-none focus:ring-1 focus:ring-accent/30;
+  }
+
+  .telemetry-grid {
+    background-size: 24px 24px;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  }
+
+  .indicator-live {
+    @apply relative flex h-2 w-2 items-center justify-center;
+  }
+
+  .indicator-live::before {
+    content: "";
+    @apply absolute h-full w-full rounded-full bg-accent animate-pulseRing;
+  }
+
+  .indicator-live::after {
+    content: "";
+    @apply relative h-2 w-2 rounded-full bg-accent shadow-[0_0_8px_#10B981];
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+[data-reduce-motion="true"],
+[data-reduce-motion="true"] *,
+[data-reduce-motion="true"] *::before,
+[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}

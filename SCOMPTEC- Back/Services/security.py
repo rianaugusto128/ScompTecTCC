@@ -4,6 +4,7 @@ import hmac
 import json
 import os
 import secrets
+import config  # Carrega as configurações também em importações diretas.
 from datetime import datetime, timedelta, timezone
 
 from fastapi import HTTPException, status
