@@ -3,11 +3,12 @@ setlocal
 cd /d "%~dp0"
 if errorlevel 1 exit /b 1
 
+set "BACK_PYTHON=%~dp0.venv\Scripts\python.exe"
+if not exist "%BACK_PYTHON%" set "BACK_PYTHON=%~dp0SCOMPTEC- Back\venv\Scripts\python.exe"
+
 if /i "%~1"=="back" goto back
 if /i "%~1"=="front" goto front
 
-set "BACK_PYTHON=%~dp0.venv\Scripts\python.exe"
-if not exist "%BACK_PYTHON%" set "BACK_PYTHON=%~dp0SCOMPTEC- Back\venv\Scripts\python.exe"
 if not exist "%BACK_PYTHON%" (
     echo [ERRO] Ambiente Python nao encontrado. Crie .venv e instale as dependencias:
     echo py -m venv .venv

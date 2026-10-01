@@ -1,8 +1,9 @@
 # SCOMPTEC — Monitoramento CNC (Frontend)
 
-Frontend do sistema de monitoramento remoto para máquinas de usinagem CNC, desenvolvido
-para o desafio da SCOMPTEC. Construído com React + Vite + Tailwind CSS + React Router,
-com dados mockados prontos para serem substituídos por uma API REST em Spring Boot.
+Frontend do sistema de monitoramento remoto para máquinas de usinagem CNC,
+construído com React + Vite + Tailwind CSS + React Router. Em produção, consome
+a API REST FastAPI em `SCOMPTEC- Back`; o modo mock continua disponível para
+apresentações sem backend.
 
 ## Stack
 
@@ -12,10 +13,18 @@ com dados mockados prontos para serem substituídos por uma API REST em Spring B
 - Lucide React (ícones)
 - Recharts (gráfico de utilização)
 
-## Como rodar localmente
+## Requisitos e como rodar localmente
+
+Use Node.js 22.12 ou superior. Na raiz do repositório, instale as dependências
+com o lockfile versionado:
 
 ```bash
-npm install
+npm --prefix "scomptec-cnc front 2" ci
+```
+
+Depois, nesta pasta (`scomptec-cnc front 2`):
+
+```bash
 npm run dev
 ```
 
@@ -88,12 +97,12 @@ src/
 └── utils/          # status.js — configuração central de cores/ícones/labels de estado
 ```
 
-## Conectando à API real (Spring Boot)
+## Conectando à API real (FastAPI)
 
-Toda a comunicação com dados passa por `src/services/api.js`. Cada função já simula o
-formato de resposta esperado; para plugar o backend real, basta trocar o corpo de cada
-função por uma chamada `fetch`/`axios` ao endpoint correspondente, mantendo a mesma
-assinatura. Os hooks em `src/hooks/` e as páginas não precisam ser alterados.
+Toda a comunicação com dados passa por `src/services/api.js`. Com `VITE_USE_MOCKS=false`,
+as operações implementadas usam os endpoints FastAPI configurados em `VITE_API_BASE_URL`.
+Com `VITE_USE_MOCKS=true`, o frontend usa dados de demonstração para os painéis ainda
+sem integração completa.
 
 Para atualização em tempo real via WebSocket, `src/services/websocket.js` já expõe uma
 interface (`connect`, `onMachineUpdate`) pronta para ser implementada com STOMP/SockJS

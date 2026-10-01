@@ -2,9 +2,27 @@
 
 # SCOMPTEC Back
 
-## Registro automático do ESP32
+API FastAPI da aplicação atual. O banco usado em desenvolvimento e produção é
+MySQL via SQLAlchemy/PyMySQL; os arquivos `tests/` e `requirements.txt` da raiz
+são legados e não devem ser usados para instalar este backend.
 
-Quando o ESP32 entrar na rede, envie `POST /api/devices/register`:
+## Instalação e execução
+
+Na raiz do projeto, crie/ative o ambiente virtual conforme o [README principal](../README.md)
+e instale:
+
+```bash
+python -m pip install -r "SCOMPTEC- Back/requirements-dev.txt"
+python -m uvicorn Main:app --app-dir "SCOMPTEC- Back" --reload --host 0.0.0.0 --port 8000
+```
+
+Configure `SCOMPTEC- Back/.env` a partir de `.env.example` antes de iniciar.
+O MySQL e o banco `cnc_monitor` precisam existir; o startup cria tabelas
+ausentes, mas não cria o banco nem migra esquemas existentes.
+
+## Registro automático do Arduino Opta WiFi
+
+Quando o Opta entrar na rede, envie `POST /api/devices/register`:
 
 ```json
 {
@@ -14,13 +32,12 @@ Quando o ESP32 entrar na rede, envie `POST /api/devices/register`:
 }
 ```
 
-No primeiro registro, a API cria uma CNC e um ESP32 com IDs UUID vinculados e
-retorna `created: true`. Ao receber o mesmo MAC novamente, atualiza os dados do
-ESP32 e retorna a mesma CNC com `created: false`.
+No primeiro registro, a API cria uma CNC e um dispositivo Opta com IDs UUID
+vinculados e retorna `created: true`. Ao receber o mesmo MAC novamente, atualiza
+os dados do dispositivo e retorna a mesma CNC com `created: false`.
 
-O MAC é único e cada CNC possui somente um ESP32 associado. Os nomes são
-gerados pelo backend de forma progressiva: `CNC 01`, `CNC 02`, `ESP32 01` e
-`ESP32 02`.
+O MAC é único e cada CNC possui somente um dispositivo associado. Os códigos
+são gerados progressivamente pelo backend.
 
 ## Banco existente
 
