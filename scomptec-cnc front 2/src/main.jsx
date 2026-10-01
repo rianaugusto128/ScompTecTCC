@@ -4,9 +4,9 @@ import { BrowserRouter, HashRouter } from "react-router-dom";
 import App from "./App.jsx";
 import "./index.css";
 
-// O build do Electron é aberto por file://. HashRouter mantém a rota no hash e
+// O build do Electron usa scomptec://app. HashRouter mantém a rota no hash e
 // evita que um recarregamento tente encontrar, por exemplo, /maquinas no disco.
-const Router = window.location.protocol === "file:" ? HashRouter : BrowserRouter;
+const Router = ["file:", "scomptec:"].includes(window.location.protocol) ? HashRouter : BrowserRouter;
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

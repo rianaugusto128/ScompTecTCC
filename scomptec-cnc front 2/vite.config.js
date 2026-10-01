@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  // Caminhos relativos são necessários quando o Electron abre o build por file://.
+  // Caminhos relativos permitem carregar os arquivos locais no Electron.
   base: './',
   server: {
     port: 5173,

@@ -28,6 +28,30 @@ npm run build
 npm run preview
 ```
 
+## Aplicativo Electron com backend no Render
+
+O instalador abre a interface local em `scomptec://app`, sem precisar hospedar o
+frontend. Essa origem é autorizada pelo backend. Em desenvolvimento, a interface
+continua em `http://localhost:5173`.
+
+Antes de gerar o instalador, configure o `.env` desta pasta:
+
+```dotenv
+VITE_API_BASE_URL=https://SEU-BACKEND.onrender.com/api
+VITE_USE_MOCKS=false
+```
+
+Substitua `SEU-BACKEND` pelo serviço real. Execute `npm run electron:build` e
+instale a nova versão disponível em `release/`. A URL é incorporada durante o
+build: alterar o `.env` não atualiza um `.exe` já distribuído. Ao atualizar do
+protocolo antigo `file://`, será necessário fazer login novamente.
+
+No Render, use a pasta raiz `SCOMPTEC- Back`, build `pip install -r requirements.txt`
+e início `uvicorn Main:app --host 0.0.0.0 --port $PORT` (o `M` é maiúsculo).
+Cadastre lá as variáveis do backend, incluindo `DATABASE_URL` e `AUTH_SECRET`.
+As credenciais do banco não devem entrar no `.env` do frontend.
+Após publicar, verifique `/api/health`: deve retornar banco e serviço com status `ok`.
+
 ## Fluxo de navegação
 
 ```

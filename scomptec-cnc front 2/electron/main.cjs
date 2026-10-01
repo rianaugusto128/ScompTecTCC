@@ -1,5 +1,12 @@
-const { app, BrowserWindow, shell } = require("electron");
+const { app, BrowserWindow, shell, protocol, net } = require("electron");
 const path = require("path");
+const { pathToFileURL } = require("url");
+
+const appUrl = "scomptec://app";
+protocol.registerSchemesAsPrivileged([{
+    scheme: "scomptec",
+    privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true }
+}]);
 
 const isDev = !app.isPackaged;
 const devServerUrl = process.env.ELECTRON_RENDERER_URL || "http://localhost:5173";
@@ -31,19 +38,41 @@ function createWindow() {
             win.webContents.openDevTools({ mode: "detach" });
         }
     } else {
-        win.loadFile(path.join(__dirname, "../dist/index.html"));
+        win.loadURL(`${appUrl}/index.html`);
     }
 
     win.webContents.on("will-navigate", (event, url) => {
-        const allowedUrl = isDev ? devServerUrl : `file://${path.join(__dirname, "../dist/index.html")}`;
-        if (!url.startsWith(allowedUrl)) {
+        const target = new URL(url);
+        const allowed = isDev
+            ? target.origin === new URL(devServerUrl).origin
+            : target.protocol === "scomptec:" && target.host === "app";
+        if (!allowed) {
             event.preventDefault();
-            shell.openExternal(url);
+            if (target.protocol === "https:" || target.protocol === "http:") {
+                shell.openExternal(url);
+            }
         }
     });
 }
 
 app.whenReady().then(() => {
+    const distPath = path.resolve(__dirname, "../dist");
+    protocol.handle("scomptec", (request) => {
+        const target = new URL(request.url);
+        if (target.host !== "app") return new Response("Not found", { status: 404 });
+        let pathname;
+        try {
+            pathname = decodeURIComponent(target.pathname);
+        } catch {
+            return new Response("Invalid path", { status: 400 });
+        }
+        const filePath = path.resolve(distPath, `.${pathname === "/" ? "/index.html" : pathname}`);
+        const relative = path.relative(distPath, filePath);
+        if (!relative || relative.startsWith("..") || path.isAbsolute(relative) || relative.includes(":")) {
+            return new Response("Forbidden", { status: 403 });
+        }
+        return net.fetch(pathToFileURL(filePath).toString());
+    });
     createWindow();
 
     app.on("activate", () => {
